@@ -1,12 +1,17 @@
 defmodule BlockScoutWeb.AddressTokenBalanceController do
   use BlockScoutWeb, :controller
 
-  alias Explorer.Chain
+  alias Explorer.{Chain, Market}
 
   def index(conn, %{"address_id" => address_hash_string}) do
     with true <- ajax?(conn),
          {:ok, address_hash} <- Chain.string_to_address_hash(address_hash_string) do
-      token_balances = Chain.fetch_last_token_balances(address_hash)
+      token_balances =
+        address_hash
+        |> Chain.fetch_last_token_balances()
+        |> Enum.map(fn token_balance ->
+          Map.update!(token_balance, :token, &Market.add_price(&1))
+        end)
 
       conn
       |> put_status(200)

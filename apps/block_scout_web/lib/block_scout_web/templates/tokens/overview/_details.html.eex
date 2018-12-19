@@ -24,6 +24,11 @@
           </h1>
 
           <h3><%= to_string(@token.contract_address_hash) %></h3>
+          <%= if @token.usd_value do %>
+            <h3>
+              <span data-selector="token-price" data-usd-value="<%= @token.usd_value %>"></span>
+            </h3>
+          <% end %>
 
           <div class="d-flex flex-column flex-md-row justify-content-start text-muted">
             <span class="mr-4 mb-3 mb-md-0">

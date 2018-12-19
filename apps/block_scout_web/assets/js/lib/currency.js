@@ -24,7 +24,7 @@ function etherToUSD (ether, usdExchangeRate) {
   return new BigNumber(ether).multipliedBy(usdExchangeRate).toNumber()
 }
 
-function formatAllUsdValues () {
+export function formatAllUsdValues () {
   $('[data-usd-value]').each((i, el) => {
     el.innerHTML = formatUsdValue(el.dataset.usdValue)
   })
