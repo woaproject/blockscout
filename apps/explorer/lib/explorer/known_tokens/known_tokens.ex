@@ -63,8 +63,7 @@ defmodule Explorer.KnownTokens do
       :set,
       :named_table,
       :public,
-      read_concurrency: true,
-      write_concurrency: true
+      read_concurrency: true
     ]
 
     if store() == :ets do
