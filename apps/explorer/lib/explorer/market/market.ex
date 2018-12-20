@@ -5,7 +5,8 @@ defmodule Explorer.Market do
 
   import Ecto.Query
 
-  alias Explorer.{ExchangeRates, Repo}
+  alias Explorer.{ExchangeRates, KnownTokens, Repo}
+  alias Explorer.Chain.Hash
   alias Explorer.ExchangeRates.Token
   alias Explorer.Market.MarketHistory
 
@@ -15,6 +16,11 @@ defmodule Explorer.Market do
   @spec get_exchange_rate(String.t()) :: Token.t() | nil
   def get_exchange_rate(symbol) do
     ExchangeRates.lookup(symbol)
+  end
+
+  @spec get_exchange_rate(String.t()) :: Hash.Address.t() | nil
+  def get_known_address(symbol) do
+    KnownTokens.lookup(symbol)
   end
 
   @doc """
@@ -42,13 +48,13 @@ defmodule Explorer.Market do
   end
 
   def add_price(%{symbol: symbol} = token) do
-    symbol_address = get_in(known_tokens(), [symbol, "address"])
+    token_address = Hash.Address.cast(token.contract_address_hash)
+    known_address = get_known_address(symbol)
 
-    known_address =
-      symbol_address && String.downcase(symbol_address) == String.downcase(to_string(token.contract_address_hash))
+    matches_known_address = known_address && known_address == token_address
 
     usd_value =
-      if known_address do
+      if matches_known_address do
         case get_exchange_rate(symbol) do
           %{usd_value: usd_value} -> usd_value
           nil -> nil
@@ -58,20 +64,5 @@ defmodule Explorer.Market do
       end
 
     Map.put(token, :usd_value, usd_value)
-  end
-
-  def known_tokens do
-    %{
-      "GSC" => %{
-        "address" => "0x228ba514309ffdf03a81a205a6d040e429d6e80c",
-        "decimal" => 18,
-        "type" => "default"
-      },
-      "IOST" => %{
-        "address" => "0xFA1a856Cfa3409CFa145Fa4e20Eb270dF3EB21ab",
-        "decimal" => 18,
-        "type" => "default"
-      }
-    }
   end
 end
