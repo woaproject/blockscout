@@ -38,9 +38,4 @@ defmodule Explorer.KnownTokens.Source do
   def decode_json(data) do
     Jason.decode!(data)
   end
-
-  @spec config(atom()) :: term
-  defp config(key) do
-    Application.get_env(:explorer, __MODULE__, [])[key]
-  end
 end
