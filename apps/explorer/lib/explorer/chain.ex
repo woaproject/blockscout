@@ -64,6 +64,7 @@ defmodule Explorer.Chain do
           :addresses
           | :address_coin_balances
           | :blocks
+          | :block_rewards
           | :exchange_rate
           | :internal_transactions
           | :logs
@@ -1541,7 +1542,7 @@ defmodule Explorer.Chain do
   """
   @spec subscribe_to_events(chain_event()) :: :ok
   def subscribe_to_events(event_type)
-      when event_type in ~w(addresses address_coin_balances blocks exchange_rate internal_transactions logs token_transfers transactions)a do
+      when event_type in ~w(addresses address_coin_balances blocks block_rewards exchange_rate internal_transactions logs token_transfers transactions)a do
     Registry.register(Registry.ChainEvents, event_type, [])
     :ok
   end

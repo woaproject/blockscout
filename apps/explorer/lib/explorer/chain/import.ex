@@ -131,7 +131,7 @@ defmodule Explorer.Chain.Import do
 
   defp broadcast_events(data, broadcast_type) do
     for {event_type, event_data} <- data,
-        event_type in ~w(addresses address_coin_balances blocks internal_transactions logs token_transfers transactions)a do
+        event_type in ~w(addresses address_coin_balances blocks block_rewards internal_transactions logs token_transfers transactions)a do
       broadcast_event_data(event_type, broadcast_type, event_data)
     end
   end
