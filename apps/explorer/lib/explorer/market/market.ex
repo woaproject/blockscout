@@ -21,7 +21,10 @@ defmodule Explorer.Market do
 
   @spec get_exchange_rate(String.t()) :: Hash.Address.t() | nil
   def get_known_address(symbol) do
-    KnownTokens.lookup(symbol)
+    case KnownTokens.lookup(symbol) do
+      {:ok, address} -> address
+      nil -> nil
+    end
   end
 
   @doc """
@@ -49,10 +52,9 @@ defmodule Explorer.Market do
   end
 
   def add_price(%{symbol: symbol} = token) do
-    token_address = Hash.Address.cast(token.contract_address_hash)
     known_address = get_known_address(symbol)
 
-    matches_known_address = known_address && known_address == token_address
+    matches_known_address = known_address && known_address == token.contract_address_hash
 
     usd_value =
       if matches_known_address do
