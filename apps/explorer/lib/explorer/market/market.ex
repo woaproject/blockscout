@@ -7,6 +7,7 @@ defmodule Explorer.Market do
 
   alias Explorer.{ExchangeRates, KnownTokens, Repo}
   alias Explorer.Chain.Hash
+  alias Explorer.Chain.Address.CurrentTokenBalance
   alias Explorer.ExchangeRates.Token
   alias Explorer.Market.MarketHistory
 
@@ -64,5 +65,15 @@ defmodule Explorer.Market do
       end
 
     Map.put(token, :usd_value, usd_value)
+  end
+
+  def add_price(%CurrentTokenBalance{token: token} = token_balance) do
+    token_with_price = add_price(token)
+
+    Map.put(token_balance, :token, token_with_price)
+  end
+
+  def add_price(tokens) when is_list(tokens) do
+    Enum.map(tokens, &add_price/1)
   end
 end

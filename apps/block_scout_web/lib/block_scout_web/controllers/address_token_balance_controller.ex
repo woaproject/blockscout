@@ -9,9 +9,7 @@ defmodule BlockScoutWeb.AddressTokenBalanceController do
       token_balances =
         address_hash
         |> Chain.fetch_last_token_balances()
-        |> Enum.map(fn token_balance ->
-          Map.update!(token_balance, :token, &Market.add_price(&1))
-        end)
+        |> Market.add_price()
 
       conn
       |> put_status(200)

@@ -13,8 +13,6 @@ defmodule BlockScoutWeb.AddressTokenController do
       tokens_plus_one = Chain.address_tokens_with_balance(address_hash, paging_options(params))
       {tokens, next_page} = split_list_by_page(tokens_plus_one)
 
-      tokens_with_price = Enum.map(tokens, &Market.add_price(&1))
-
       render(
         conn,
         "index.html",
@@ -23,7 +21,7 @@ defmodule BlockScoutWeb.AddressTokenController do
         transaction_count: transaction_count(address),
         validation_count: validation_count(address),
         next_page_params: next_page_params(next_page, tokens, params),
-        tokens: tokens_with_price
+        tokens: Market.add_price(tokens)
       )
     else
       :error ->
