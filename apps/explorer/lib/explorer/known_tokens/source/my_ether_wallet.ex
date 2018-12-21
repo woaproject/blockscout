@@ -8,7 +8,7 @@ defmodule Explorer.KnownTokens.Source.MyEtherWallet do
   @behaviour Source
 
   @impl Source
-  def source_url() do
+  def source_url do
     "https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json"
   end
 end

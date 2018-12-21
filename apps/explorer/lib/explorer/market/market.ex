@@ -6,8 +6,8 @@ defmodule Explorer.Market do
   import Ecto.Query
 
   alias Explorer.{ExchangeRates, KnownTokens, Repo}
-  alias Explorer.Chain.Hash
   alias Explorer.Chain.Address.CurrentTokenBalance
+  alias Explorer.Chain.Hash
   alias Explorer.ExchangeRates.Token
   alias Explorer.Market.MarketHistory
 

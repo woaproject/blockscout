@@ -88,7 +88,7 @@ defmodule Explorer.KnownTokens do
   @doc """
   Returns a specific address from the known tokens by symbol
   """
-  @spec lookup(String.t()) :: Hash.Address.t() | nil
+  @spec lookup(String.t()) :: {:ok, Hash.Address.t()} | :error | nil
   def lookup(symbol) do
     if store() == :ets do
       case :ets.lookup(table_name(), symbol) do
