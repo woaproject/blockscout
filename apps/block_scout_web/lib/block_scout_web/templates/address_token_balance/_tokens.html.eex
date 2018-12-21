@@ -22,6 +22,9 @@
           <p class="mb-0">
             <span data-selector="token-price" data-usd-value="<%= token_balance.token.usd_value %>"></span>
           </p>
+          <p class="mb-0">
+            <span data-selector="token-balance-usd" data-usd-value="<%= balance_in_usd(token_balance) %>"></span>
+          </p>
         <% end %>
       <% end %>
     </div>
