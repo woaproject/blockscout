@@ -1,6 +1,6 @@
 defmodule Explorer.KnownTokens.Source do
   @moduledoc """
-  Module for fetching list of known tokens.
+  Behaviour for fetching list of known tokens.
   """
 
   alias Explorer.Chain.Hash
@@ -10,8 +10,8 @@ defmodule Explorer.KnownTokens.Source do
   Fetches known tokens
   """
   @spec fetch_known_tokens() :: {:ok, [Hash.Address.t()]} | {:error, any}
-  def fetch_known_tokens() do
-    case HTTPoison.get(source_url(), headers()) do
+  def fetch_known_tokens(source \\ known_tokens_source()) do
+    case HTTPoison.get(source.source_url(), headers()) do
       {:ok, %Response{body: body, status_code: 200}} ->
         {:ok, decode_json(body)}
 
@@ -26,10 +26,7 @@ defmodule Explorer.KnownTokens.Source do
   @doc """
   Url for querying the list of known tokens.
   """
-  @spec source_url() :: String.t()
-  def source_url() do
-    "https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json"
-  end
+  @callback source_url() :: String.t()
 
   def headers do
     [{"Content-Type", "application/json"}]
@@ -37,5 +34,15 @@ defmodule Explorer.KnownTokens.Source do
 
   def decode_json(data) do
     Jason.decode!(data)
+  end
+
+  @spec known_tokens_source() :: module()
+  defp known_tokens_source do
+    config(:source) || Explorer.KnownTokens.Source.MyEtherWallet
+  end
+
+  @spec config(atom()) :: term
+  defp config(key) do
+    Application.get_env(:explorer, __MODULE__, [])[key]
   end
 end

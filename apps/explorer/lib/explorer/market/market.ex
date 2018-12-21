@@ -19,7 +19,10 @@ defmodule Explorer.Market do
     ExchangeRates.lookup(symbol)
   end
 
-  @spec get_exchange_rate(String.t()) :: Hash.Address.t() | nil
+  @doc """
+  Get the address of the token with the given symbol.
+  """
+  @spec get_known_address(String.t()) :: Hash.Address.t() | nil
   def get_known_address(symbol) do
     case KnownTokens.lookup(symbol) do
       {:ok, address} -> address
