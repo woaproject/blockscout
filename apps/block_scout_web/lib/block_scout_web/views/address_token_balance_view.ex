@@ -21,8 +21,12 @@ defmodule BlockScoutWeb.AddressTokenBalanceView do
   end
 
   def balance_in_usd(token_balance) do
-    tokens = CurrencyHelpers.divide_decimals(token_balance.value, token_balance.token.decimals)
-    price = token_balance.token.usd_value
-    Decimal.mult(tokens, price)
+    if token_balance.token.usd_value do
+      tokens = CurrencyHelpers.divide_decimals(token_balance.value, token_balance.token.decimals)
+      price = token_balance.token.usd_value
+      Decimal.mult(tokens, price)
+    else
+      nil
+    end
   end
 end
